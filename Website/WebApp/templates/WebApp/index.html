@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IntegriSense - Emotional Integrity in Real Time</title>
-    <link rel="stylesheet" href="styles.css">
+    {% comment %} <link rel="stylesheet" href="styles.css"> {% endcomment %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'WebApp/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -630,7 +632,7 @@
   
   <div class="team-grid">
 
-    <div class="team-member" style="background-image: url('images/linet.jpg');">
+    <div class="team-member" style="background-image: url('{% static 'WebApp/images/linet.jpg' %}');">
         <div class="overlay">
         <h3>Linet</h3>
         <p>UI/UX Lead & Branding</p>
@@ -639,7 +641,7 @@
         </div>
     </div>
 
-      <div class="team-member" style="background-image: url('images/lee.jpg');">
+      <div class="team-member" style="background-image: url('{% static 'WebApp/images/lee.jpg' %}');">
             <div class="overlay">
                 <h3>Lee</h3>
                 <p>IoT & H/W Alchemist</p>
@@ -648,7 +650,7 @@
             </div>
         </div>
        
-      <div class="team-member" style="background-image: url('images/felix.jpg');">
+      <div class="team-member" style="background-image: url('{% static 'Webapp/images/felix.jpg' %}');">
         <div class="overlay">
             <h3>Felix</h3>
             <p>IoT & Hardware Systems Engineer</p>
@@ -657,7 +659,7 @@
         </div>
       </div>
 
-      <div class="team-member" style="background-image: url('images/richard.jpg');">
+      <div class="team-member" style="background-image: url('{% static 'WebApp/images/richard.jpg' %}');">
         <div class="overlay">
             <h3>Richard </h3>
             <p>Research</p>
@@ -666,7 +668,7 @@
         </div>
       </div>
 
-      <div class="team-member" style="background-image: url('images/sam.jpg');">
+      <div class="team-member" style="background-image: url('{% static 'WebApp/images/sam.jpg' %}');">
         <div class="overlay">
             <h3>Sam</h3>
             <p>IoT & Hardware Systems Engineer</p>
@@ -675,7 +677,7 @@
         </div>
       </div>
 
-      <div class="team-member" style="background-image: url('images/shem.jpg');">
+      <div class="team-member" style="background-image: url('{% static 'WebApp/images/shem.jpg' %}');">
         <div class="overlay">
             <h3>Shem</h3>
             <p>IoT & Hardware Systems Engineer</p>
@@ -813,6 +815,8 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    {% load static %}
+    <script src="{% static 'WebApp/script.js' %}"></script>
+    {% comment %} <script src="script.js"></script> {% endcomment %}
 </body>
 </html>
