@@ -1,0 +1,23 @@
+services:
+  python-web:
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    container_name: python-web
+    restart: unless-stopped
+    init: true
+    ports:
+      - "8000:8000"  # Expose Django app on port 8000
+    # env_file: ./.env  # Uncomment if .env file exists
+    # If you use a database, add depends_on and environment here
+    # volumes:  # Uncomment and configure if you need to mount code for live reload in development
+    #   - .:/app
+    networks:
+      - webnet
+
+# No external database or cache service detected in the project structure or Dockerfile.
+# If you use a database (e.g., PostgreSQL), add it as a service below and configure accordingly.
+
+networks:
+  webnet:
+    driver: bridge

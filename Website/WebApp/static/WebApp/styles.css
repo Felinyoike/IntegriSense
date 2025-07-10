@@ -1248,3 +1248,12 @@ section {
     text-decoration: none;
     color: #333;
   }
+
+a[href^="mailto:"], a[href^="tel:"]{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
