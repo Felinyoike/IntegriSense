@@ -1,0 +1,82 @@
+# Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+
+# SQLite database (local dev only)
+db.sqlite3
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build and distribution outputs
+dist/
+build/
+out/
+tmp/
+temp/
+*.tmp
+
+# Test and debug artifacts
+test/
+tests/
+*.log
+debug/
+
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Documentation
+README*
+*.md
+docs/
+
+# Local and config files
+.local/
+local/
+config.local.*
+*.local.yml
+
+# Docker and Compose files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Node.js (if any JS dev dependencies are added in future)
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Go (for completeness, though not detected)
+/vendor/
+*.test
+.go-cache/
+
+# Java (for completeness, though not detected)
+target/
+*.class
+.gradle/
+
+# Miscellaneous
+*.bak
+*.orig
+
+# Exclude static and template assets from ignore (needed for app)
+!WebApp/static/
+!WebApp/templates/
