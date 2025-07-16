@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 import re
 
+
 class SensorData(models.Model):
     device_id = models.CharField(max_length=50)
     bpm = models.FloatField()
