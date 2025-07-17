@@ -33,7 +33,10 @@ RUN . /app/.venv/bin/activate && \
 # Copy application code
 COPY --link . .
 
-# Verify Django can find settings before collectstatic
+# Set Django settings module
+ENV DJANGO_SETTINGS_MODULE=Website.settings
+
+# Validate Django setup
 RUN . /app/.venv/bin/activate && \
     python -c "import django; django.setup()" || \
     (echo "Django setup failed"; exit 1)

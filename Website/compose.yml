@@ -15,9 +15,6 @@ services:
     networks:
       - webnet
 
-# No external database or cache service detected in the project structure or Dockerfile.
-# If you use a database (e.g., PostgreSQL), add it as a service below and configure accordingly.
-
 networks:
   webnet:
     driver: bridge
