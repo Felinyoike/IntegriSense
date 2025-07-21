@@ -1,230 +1,215 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, Users, Calendar, Activity } from "lucide-react";
-import { toast } from "sonner";
+import { Users, Calendar, Download, FileText, TrendingUp, AlertCircle } from "lucide-react";
 
-interface TestData {
+interface TestResult {
   id: string;
-  timestamp: string;
-  age: number;
-  gender: string;
-  eda: number;
-  ecg: number;
-  resp: number;
-  temp: number;
-  prediction: string;
-  confidence: number;
-}
-
-interface UserHistory {
-  username: string;
-  tests: TestData[];
+  date: string;
+  time: string;
+  participant: string;
+  duration: string;
+  stressLevel: "Low" | "Medium" | "High";
+  accuracy: number;
+  heartRate: number;
+  temperature: number;
+  notes: string;
 }
 
 export const PreviousTests = () => {
-  const [selectedUser, setSelectedUser] = useState<string>("");
-  const [userHistories, setUserHistories] = useState<UserHistory[]>([]);
-  const [filteredTests, setFilteredTests] = useState<TestData[]>([]);
+  const [tests, setTests] = useState<TestResult[]>([]);
+  const [activeTab, setActiveTab] = useState("all");
 
-  // Generate mock data
   useEffect(() => {
-    const mockUsers = ["john_doe", "jane_smith", "mike_johnson", "sarah_wilson"];
-    const mockHistories: UserHistory[] = mockUsers.map(username => ({
-      username,
-      tests: Array.from({ length: Math.floor(Math.random() * 15) + 5 }, (_, i) => ({
-        id: `${username}_${i}`,
-        timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleString(),
-        age: Math.floor(Math.random() * 40) + 20,
-        gender: Math.random() > 0.5 ? "Male" : "Female",
-        eda: Math.random() * 100 + 50,
-        ecg: Math.random() * 40 + 60,
-        resp: Math.random() * 10 + 12,
-        temp: Math.random() * 2 + 36.5,
-        prediction: Math.random() > 0.6 ? "Stress" : "Calm",
-        confidence: Math.random() * 30 + 70
-      }))
-    }));
+    // Generate mock test data
+    const mockTests: TestResult[] = Array.from({ length: 15 }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      
+      const stressLevels: Array<"Low" | "Medium" | "High"> = ["Low", "Medium", "High"];
+      const participants = ["Patient A", "Patient B", "Patient C", "Patient D", "Patient E"];
+      
+      return {
+        id: `test-${i + 1}`,
+        date: date.toLocaleDateString(),
+        time: new Date(date.getTime() + Math.random() * 24 * 60 * 60 * 1000).toLocaleTimeString(),
+        participant: participants[Math.floor(Math.random() * participants.length)],
+        duration: `${Math.floor(Math.random() * 30) + 10} min`,
+        stressLevel: stressLevels[Math.floor(Math.random() * stressLevels.length)],
+        accuracy: Math.floor(Math.random() * 20) + 80,
+        heartRate: Math.floor(Math.random() * 40) + 60,
+        temperature: Math.round((Math.random() * 2 + 36.5) * 10) / 10,
+        notes: "Test completed successfully"
+      };
+    });
     
-    setUserHistories(mockHistories);
-    if (mockHistories.length > 0) {
-      setSelectedUser(mockHistories[0].username);
-      setFilteredTests(mockHistories[0].tests);
-    }
+    setTests(mockTests);
   }, []);
 
-  const handleUserChange = (username: string) => {
-    setSelectedUser(username);
-    const userHistory = userHistories.find(h => h.username === username);
-    setFilteredTests(userHistory?.tests || []);
-  };
-
-  const handleExportPDF = () => {
-    if (!selectedUser) {
-      toast.error("Please select a user first");
-      return;
+  const getStressLevelColor = (level: string) => {
+    switch (level) {
+      case "Low": return "success";
+      case "Medium": return "warning";
+      case "High": return "destructive";
+      default: return "secondary";
     }
-
-    // Simulate PDF export
-    toast.success(`Exporting PDF for ${selectedUser.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}...`);
-    
-    setTimeout(() => {
-      toast.success("PDF exported successfully!");
-    }, 2000);
   };
 
-  const getStressCount = () => {
-    return filteredTests.filter(test => test.prediction === "Stress").length;
-  };
+  const filteredTests = tests.filter(test => {
+    if (activeTab === "all") return true;
+    return test.stressLevel.toLowerCase() === activeTab;
+  });
 
-  const getCalmCount = () => {
-    return filteredTests.filter(test => test.prediction === "Calm").length;
-  };
-
-  const getAverageConfidence = () => {
-    if (filteredTests.length === 0) return 0;
-    return filteredTests.reduce((sum, test) => sum + test.confidence, 0) / filteredTests.length;
+  const testStats = {
+    total: tests.length,
+    high: tests.filter(t => t.stressLevel === "High").length,
+    medium: tests.filter(t => t.stressLevel === "Medium").length,
+    low: tests.filter(t => t.stressLevel === "Low").length,
+    avgAccuracy: tests.reduce((sum, t) => sum + t.accuracy, 0) / tests.length || 0
   };
 
   return (
     <div className="space-y-6">
-      {/* User Selection and Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Header */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center space-x-2">
+                <Users className="h-5 w-5 text-primary" />
+                <span>Previous Test Results</span>
+              </CardTitle>
+              <CardDescription>
+                Historical stress detection test results and analytics
+              </CardDescription>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export Data
+              </Button>
+              <Button variant="outline" size="sm">
+                <FileText className="h-4 w-4 mr-2" />
+                Generate Report
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <Card className="border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="h-5 w-5 text-primary" />
-              <span>Select User</span>
-            </CardTitle>
-            <CardDescription>
-              Choose a user to view their test history and export data
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Select value={selectedUser} onValueChange={handleUserChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a user..." />
-              </SelectTrigger>
-              <SelectContent>
-                {userHistories.map(history => (
-                  <SelectItem key={history.username} value={history.username}>
-                    {history.username.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Button 
-              onClick={handleExportPDF} 
-              className="w-full mt-4 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
-              disabled={!selectedUser}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export to PDF
-            </Button>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-primary">{testStats.total}</div>
+            <p className="text-xs text-muted-foreground">Total Tests</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-destructive/20">
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-destructive">{testStats.high}</div>
+            <p className="text-xs text-muted-foreground">High Stress</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-warning/20">
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-warning">{testStats.medium}</div>
+            <p className="text-xs text-muted-foreground">Medium Stress</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-success/20">
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-success">{testStats.low}</div>
+            <p className="text-xs text-muted-foreground">Low Stress</p>
           </CardContent>
         </Card>
 
         <Card className="border-accent/20">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Activity className="h-5 w-5 text-accent" />
-              <span>Quick Stats</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Tests:</span>
-                <Badge variant="outline">{filteredTests.length}</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Stress Detected:</span>
-                <Badge variant="destructive">{getStressCount()}</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Calm States:</span>
-                <Badge variant="default" className="bg-success text-success-foreground">
-                  {getCalmCount()}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Avg. Confidence:</span>
-                <Badge variant="secondary">{getAverageConfidence().toFixed(1)}%</Badge>
-              </div>
-            </div>
+          <CardContent className="pt-6">
+            <div className="text-2xl font-bold text-accent">{testStats.avgAccuracy.toFixed(1)}%</div>
+            <p className="text-xs text-muted-foreground">Avg Accuracy</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Test History Table */}
+      {/* Tests Table */}
       <Card className="border-primary/20 shadow-card">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Calendar className="h-5 w-5 text-primary" />
             <span>Test History</span>
           </CardTitle>
-          <CardDescription>
-            Complete test history for {selectedUser ? selectedUser.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'selected user'}
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Gender</TableHead>
-                  <TableHead>EDA</TableHead>
-                  <TableHead>ECG</TableHead>
-                  <TableHead>Resp</TableHead>
-                  <TableHead>Temp</TableHead>
-                  <TableHead>Prediction</TableHead>
-                  <TableHead>Confidence</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredTests.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
-                      No test data available. Select a user to view their history.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredTests.map((test) => (
-                    <TableRow key={test.id}>
-                      <TableCell className="font-mono text-xs">
-                        {test.timestamp}
-                      </TableCell>
-                      <TableCell>{test.age}</TableCell>
-                      <TableCell>{test.gender}</TableCell>
-                      <TableCell>{test.eda.toFixed(1)}</TableCell>
-                      <TableCell>{test.ecg.toFixed(0)}</TableCell>
-                      <TableCell>{test.resp.toFixed(1)}</TableCell>
-                      <TableCell>{test.temp.toFixed(1)}°C</TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={test.prediction === "Stress" ? "destructive" : "default"}
-                          className={test.prediction === "Calm" ? "bg-success text-success-foreground" : ""}
-                        >
-                          {test.prediction}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">
-                          {test.confidence.toFixed(1)}%
-                        </Badge>
-                      </TableCell>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="all">All Tests</TabsTrigger>
+              <TabsTrigger value="high">High Stress</TabsTrigger>
+              <TabsTrigger value="medium">Medium Stress</TabsTrigger>
+              <TabsTrigger value="low">Low Stress</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value={activeTab} className="space-y-4">
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Participant</TableHead>
+                      <TableHead>Duration</TableHead>
+                      <TableHead>Stress Level</TableHead>
+                      <TableHead>Accuracy</TableHead>
+                      <TableHead>Heart Rate</TableHead>
+                      <TableHead>Temperature</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredTests.map((test) => (
+                      <TableRow key={test.id}>
+                        <TableCell className="font-medium">{test.date}</TableCell>
+                        <TableCell>{test.time}</TableCell>
+                        <TableCell>{test.participant}</TableCell>
+                        <TableCell>{test.duration}</TableCell>
+                        <TableCell>
+                          <Badge variant={getStressLevelColor(test.stressLevel) as any}>
+                            {test.stressLevel}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{test.accuracy}%</TableCell>
+                        <TableCell>{test.heartRate} BPM</TableCell>
+                        <TableCell>{test.temperature}°C</TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <Button variant="ghost" size="sm">
+                              <FileText className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <TrendingUp className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {filteredTests.length === 0 && (
+                <div className="text-center py-8">
+                  <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No tests found for the selected filter.</p>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
