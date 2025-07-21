@@ -7,9 +7,11 @@ import { Activity, Heart, Thermometer, Zap, Users, TrendingUp, Download, Brain }
 import { RealTimeMetrics } from "./RealTimeMetrics";
 import { PreviousTests } from "./PreviousTests";
 import { Analytics } from "./Analytics";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -42,6 +44,9 @@ export const Dashboard = () => {
                 <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
                 <span className="text-sm text-muted-foreground">System Online</span>
               </div>
+              <Button variant="outline" onClick={signOut} size="sm">
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>
