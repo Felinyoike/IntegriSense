@@ -1,4 +1,4 @@
-// Smooth scrolling for navigation
+// Smooth scrolling function
 function scrollToSection(sectionId) {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -9,49 +9,17 @@ function scrollToSection(sectionId) {
     }
 }
 
-// Form handling
-document.addEventListener('DOMContentLoaded', function() {
-    // Access form submission
-    const accessForm = document.getElementById('accessForm');
-    if (accessForm) {
-        accessForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const profession = document.getElementById('profession').value;
-            
-            // Here you would typically send the data to your server
-            console.log('Pilot program signup:', { email, profession });
-            
-            // Show success message
-            alert('Thank you for your interest! We\'ll be in touch soon with early access details.');
-            
-            // Reset form
-            accessForm.reset();
-        });
-    }
-    
-    // Newsletter form submission
-    const newsletterForm = document.getElementById('newsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = this.querySelector('input[type="email"]').value;
-            
-            // Here you would typically send the data to your server
-            console.log('Newsletter signup:', email);
-            
-            // Show success message
-            alert('Thank you for subscribing to our newsletter!');
-            
-            // Reset form
-            this.reset();
-        });
+// Add scroll event listener for navbar
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(34, 34, 47, 0.95)';
+    } else {
+        navbar.style.background = 'rgba(34, 34, 47, 0.8)';
     }
 });
 
-// Intersection Observer for animations
+// Add intersection observer for animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -68,100 +36,85 @@ const observer = new IntersectionObserver(function(entries) {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.step-card, .audience-card, .feature-card, .validation-card, .case-card, .ethics-card');
+    const animatedElements = document.querySelectorAll('.step-card, .audience-card, .validation-card, .feature-card, .ethics-card');
     
     animatedElements.forEach(el => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
+        el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
 });
 
-// Add scroll effect to hero section
-window.addEventListener('scroll', function() {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
+// Add mobile menu toggle (if needed)
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar');
     
-    if (hero) {
-        const rate = scrolled * -0.5;
-        hero.style.transform = `translateY(${rate}px)`;
+    // Add mobile menu button if on mobile
+    if (window.innerWidth <= 768) {
+        const mobileMenuBtn = document.createElement('button');
+        mobileMenuBtn.innerHTML = '☰';
+        mobileMenuBtn.style.cssText = `
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: block;
+        `;
+        
+        const navContainer = document.querySelector('.nav-container');
+        navContainer.appendChild(mobileMenuBtn);
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(34, 34, 47, 0.95)';
+                navLinks.style.padding = '1rem';
+                navLinks.style.borderTop = '1px solid hsl(217.2, 32.6%, 17.5%)';
+            }
+        });
     }
 });
 
-// Add loading animation to buttons
+// Add form submission handler (if needed)
 document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Add loading state if it's a form submission
-            if (this.type === 'submit') {
-                const originalText = this.innerHTML;
-                this.innerHTML = 'Processing...';
-                this.disabled = true;
-                
-                // Re-enable after 2 seconds (in real app, this would be after server response)
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.disabled = false;
-                }, 2000);
-            }
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your form submission logic here
+            console.log('Form submitted');
         });
     });
 });
 
-// Add dynamic metrics animation
-function animateMetrics() {
-    const metrics = document.querySelectorAll('.stat-number');
-    
-    metrics.forEach(metric => {
-        const finalValue = metric.textContent;
-        const isPercentage = finalValue.includes('%');
-        const isTime = finalValue.includes('hrs') || finalValue.includes('ms');
-        
-        let numericValue = parseFloat(finalValue.replace(/[^\d.]/g, ''));
-        let currentValue = 0;
-        const increment = numericValue / 50; // 50 steps
-        
-        const timer = setInterval(() => {
-            currentValue += increment;
-            
-            if (currentValue >= numericValue) {
-                currentValue = numericValue;
-                clearInterval(timer);
-            }
-            
-            let displayValue = Math.floor(currentValue * 10) / 10;
-            
-            if (isPercentage) {
-                metric.textContent = displayValue + '%';
-            } else if (isTime) {
-                if (finalValue.includes('hrs')) {
-                    metric.textContent = Math.floor(displayValue) + '+hrs';
-                } else {
-                    metric.textContent = '<' + Math.floor(displayValue) + 'ms';
-                }
-            } else {
-                metric.textContent = displayValue.toFixed(1) + '%';
-            }
-        }, 50);
-    });
-}
+// Add loading animation
+window.addEventListener('load', function() {
+    document.body.style.opacity = '1';
+    document.body.style.transition = 'opacity 0.3s ease';
+});
 
-// Trigger metrics animation when stats section is visible
-const statsObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            animateMetrics();
-            statsObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
-
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    const statsSection = document.querySelector('.stats-grid');
-    if (statsSection) {
-        statsObserver.observe(statsSection);
-    }
+    // Set initial body opacity for loading animation
+    document.body.style.opacity = '0';
+    
+    // Add smooth scroll behavior to all internal links
+    const internalLinks = document.querySelectorAll('a[href^="#"]');
+    internalLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            scrollToSection(targetId);
+        });
+    });
 });

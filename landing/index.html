@@ -8,14 +8,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="brand-blue">Integri</span>Sense
+            </div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#services">Services</a>
+                <a href="#team">Team</a>
+            </nav>
+        </div>
+    </header>
+
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-background"></div>
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="pulse-dot"></span>
-                    Revolutionary Biofeedback Technology
+                    Revolutionary Biofeedback Tech
                 </div>
                 
                 <h1 class="hero-title">
@@ -33,13 +48,6 @@
                 </p>
                 
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="scrollToSection('cta')">
-                        Request Early Access
-                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                    
                     <button class="btn btn-secondary" onclick="scrollToSection('how-it-works')">
                         <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5,3 19,12 5,21 5,3"/>
@@ -58,7 +66,7 @@
     </section>
 
     <!-- About Section -->
-    <section class="about">
+    <section id="about" class="about">
         <div class="container">
             <div class="section-header">
                 <h2>What Is <span class="brand-blue">IntegriSense</span>?</h2>
@@ -172,8 +180,6 @@
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="6"/>
                             <polyline points="12,10 12,12 13,13"/>
-                            <path d="M12 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            <path d="M12 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/>
                         </svg>
                     </div>
                     <h3>Wear the Sensor</h3>
@@ -208,7 +214,7 @@
     </section>
 
     <!-- Target Audience Section -->
-    <section class="target-audience">
+    <section id="services" class="target-audience">
         <div class="container">
             <div class="section-header">
                 <h2>Who <span class="brand-blue">IntegriSense</span> Is For</h2>
@@ -248,40 +254,6 @@
                 </div>
                 
                 <div class="audience-card">
-                    <div class="audience-icon emerald">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                    </div>
-                    <h3>HR & Job Interviewers</h3>
-                    <p>Gain deeper insights into candidate responses and cultural fit during the interview process.</p>
-                    <ul class="benefits-list">
-                        <li>Better hiring decisions</li>
-                        <li>Reduce unconscious bias</li>
-                        <li>Improve team dynamics</li>
-                    </ul>
-                </div>
-                
-                <div class="audience-card">
-                    <div class="audience-icon purple">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1m5-6 5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/>
-                            <path d="M15 2v5h5"/>
-                        </svg>
-                    </div>
-                    <h3>Legal & Court Psychologists</h3>
-                    <p>Professional-grade emotional analysis for legal proceedings and psychological evaluations.</p>
-                    <ul class="benefits-list">
-                        <li>Evidence-based insights</li>
-                        <li>Objective documentation</li>
-                        <li>Enhanced credibility</li>
-                    </ul>
-                </div>
-                
-                <div class="audience-card">
                     <div class="audience-icon orange">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
@@ -301,7 +273,7 @@
     </section>
 
     <!-- Scientific Validation Section -->
-    <section class="scientific-validation">
+    <section id="validation" class="scientific-validation">
         <div class="container">
             <div class="section-header">
                 <h2><span class="brand-blue">Scientific</span> Validation</h2>
@@ -319,7 +291,7 @@
                     <div class="validation-content">
                         <div class="validation-header">
                             <h3>HRV in PTSD Therapy</h3>
-                            <span class="validation-metric">87% improvement</span>
+                            <span class="validation-metric">87%</span>
                         </div>
                         <p>Heart Rate Variability has been clinically validated in treating PTSD and emotional regulation disorders, with over 200+ peer-reviewed studies supporting its efficacy.</p>
                     </div>
@@ -334,7 +306,7 @@
                     <div class="validation-content">
                         <div class="validation-header">
                             <h3>EDA in Deception Detection</h3>
-                            <span class="validation-metric">92% accuracy</span>
+                            <span class="validation-metric">92%</span>
                         </div>
                         <p>Electrodermal Activity is widely used in high-stakes interviews, polygraph testing, and marketing research with proven accuracy in emotional response detection.</p>
                     </div>
@@ -350,41 +322,10 @@
                     <div class="validation-content">
                         <div class="validation-header">
                             <h3>Machine Learning Datasets</h3>
-                            <span class="validation-metric">10M+ data points</span>
+                            <span class="validation-metric">10M+</span>
                         </div>
                         <p>Our AI models are trained on validated emotional datasets from leading research institutions, including MIT, Stanford, and Harvard Medical School.</p>
                     </div>
-                </div>
-                
-                <div class="validation-card">
-                    <div class="validation-icon orange">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                            <path d="M4 22h16"/>
-                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>
-                        </svg>
-                    </div>
-                    <div class="validation-content">
-                        <div class="validation-header">
-                            <h3>Clinical Partnerships</h3>
-                            <span class="validation-metric">15+ partners</span>
-                        </div>
-                        <p>IntegriSense is developed in collaboration with licensed therapists, clinical psychologists, and biomedical engineers with 20+ years of combined experience.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="trusted-by">
-                <h3>Trusted by Research Institutions</h3>
-                <div class="institutions">
-                    <span>MIT Media Lab</span>
-                    <span>Stanford HCI</span>
-                    <span>Harvard Medical</span>
-                    <span>NIH Research</span>
-                    <span>Mayo Clinic</span>
                 </div>
             </div>
         </div>
@@ -442,10 +383,10 @@
                         </svg>
                     </div>
                     <h3>Local Data Privacy</h3>
-                    <p>All data processing happens locally on-device with end-to-end encryption. No cloud storage, complete HIPAA compliance.</p>
+                    <p>All data processing happens locally on-device with end-to-end encryption. No cloud storage, complete privacy compliance.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card centered-features">
                     <div class="feature-icon orange">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
@@ -463,17 +404,6 @@
                     <h3>Advanced AI Processing</h3>
                     <p>Machine learning models trained on millions of biometric patterns for accurate emotional state recognition and prediction.</p>
                 </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon green">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="1" y="6" width="18" height="10" rx="2" ry="2"/>
-                            <line x1="22" y1="12" x2="23" y2="12"/>
-                        </svg>
-                    </div>
-                    <h3>All-Day Battery Life</h3>
-                    <p>Ultra-low power consumption with 24+ hour battery life, wireless charging, and lightweight ergonomic design.</p>
-                </div>
             </div>
             
             <div class="stats-grid">
@@ -484,109 +414,6 @@
                 <div class="stat-card emerald">
                     <div class="stat-number">&lt;50ms</div>
                     <div class="stat-label">Response Time</div>
-                </div>
-                <div class="stat-card purple">
-                    <div class="stat-number">24+hrs</div>
-                    <div class="stat-label">Battery Life</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Use Cases Section -->
-    <section class="use-cases">
-        <div class="container">
-            <div class="section-header">
-                <h2>Real-World <span class="brand-blue">Success Stories</span></h2>
-                <div class="section-divider"></div>
-                <p class="section-subtitle">See how professionals are using IntegriSense to make better decisions</p>
-            </div>
-            
-            <div class="cases-grid">
-                <div class="case-card">
-                    <div class="case-header">
-                        <div class="case-icon blue">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Therapeutic Breakthrough</h3>
-                            <span class="case-scenario">Therapy Session</span>
-                        </div>
-                    </div>
-                    <p>During a PTSD therapy session, IntegriSense detected a significant stress spike when discussing a seemingly minor event. This physiological response revealed a hidden trauma trigger, leading to a major breakthrough in treatment.</p>
-                    <div class="case-result">
-                        <span class="result-label">Result:</span> Patient achieved 40% reduction in anxiety symptoms within 6 weeks
-                    </div>
-                </div>
-                
-                <div class="case-card">
-                    <div class="case-header">
-                        <div class="case-icon red">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Border Security Success</h3>
-                            <span class="case-scenario">Airport Screening</span>
-                        </div>
-                    </div>
-                    <p>Border agents noticed inconsistent emotional responses during routine questioning. IntegriSense data revealed elevated stress patterns that didn't match the traveler's calm demeanor, leading to discovery of fraudulent documents.</p>
-                    <div class="case-result">
-                        <span class="result-label">Result:</span> Prevented potential security threat, validated by document analysis
-                    </div>
-                </div>
-                
-                <div class="case-card">
-                    <div class="case-header">
-                        <div class="case-icon emerald">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Perfect Hire Decision</h3>
-                            <span class="case-scenario">Executive Interview</span>
-                        </div>
-                    </div>
-                    <p>A candidate interviewed perfectly but IntegriSense showed elevated stress when discussing team collaboration. Follow-up questions revealed concerns about leadership style, leading to a more suitable role placement.</p>
-                    <div class="case-result">
-                        <span class="result-label">Result:</span> 95% employee retention rate using IntegriSense hiring insights
-                    </div>
-                </div>
-                
-                <div class="case-card">
-                    <div class="case-header">
-                        <div class="case-icon purple">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1m5-6 5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/>
-                                <path d="M15 2v5h5"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Legal Case Evidence</h3>
-                            <span class="case-scenario">Court Psychology</span>
-                        </div>
-                    </div>
-                    <p>In a custody evaluation, IntegriSense provided objective emotional data showing genuine care and attachment patterns between parent and child, supporting professional recommendations with biometric evidence.</p>
-                    <div class="case-result">
-                        <span class="result-label">Result:</span> Court accepted biometric data as supporting evidence
-                    </div>
-                </div>
-            </div>
-            
-            <div class="usage-stats">
-                <h3>Join 500+ Professionals Already Using IntegriSense</h3>
-                <p>Trusted by therapists, security professionals, HR managers, and legal experts worldwide</p>
-                <div class="usage-badges">
-                    <div class="usage-badge">200+ Therapy Sessions</div>
-                    <div class="usage-badge">150+ Security Screenings</div>
-                    <div class="usage-badge">300+ Job Interviews</div>
                 </div>
             </div>
         </div>
@@ -660,30 +487,11 @@
                         </svg>
                     </div>
                     <h3>Professional Use Only</h3>
-                    <p>IntegriSense is designed for licensed professionals in therapeutic, security, legal, and educational contexts with proper training and certification.</p>
+                    <p>IntegriSense is designed for licensed professionals in therapeutic, security, and educational contexts with proper training and certification.</p>
                     <ul class="ethics-details">
                         <li>Professional licensing required</li>
                         <li>Training certification</li>
                         <li>Ethical use guidelines</li>
-                    </ul>
-                </div>
-                
-                <div class="ethics-card">
-                    <div class="ethics-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14,2 14,8 20,8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10,9 9,9 8,9"/>
-                        </svg>
-                    </div>
-                    <h3>HIPAA Compliance</h3>
-                    <p>Full compliance with healthcare privacy regulations, legal standards, and professional ethical guidelines across all supported industries.</p>
-                    <ul class="ethics-details">
-                        <li>Healthcare privacy protection</li>
-                        <li>Legal standard compliance</li>
-                        <li>Industry-specific safeguards</li>
                     </ul>
                 </div>
                 
@@ -716,104 +524,66 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section id="cta" class="cta">
+    <!-- Meet the Team Section -->
+    <section id="team" class="team-section">
         <div class="container">
-            <div class="cta-header">
-                <h2>Ready to Transform Your Practice?</h2>
-                <p>Join our exclusive pilot program and be among the first professionals to experience the future of emotional intelligence technology.</p>
-            </div>
+            <h2>Meet the Team</h2>
+            <p class="section-subtext">IntegriSense is brought to life by a passionate, multidisciplinary team from JKUAT.</p>
             
-            <div class="cta-options">
-                <div class="cta-option">
-                    <div class="cta-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
+            <div class="team-grid">
+                <div class="team-member" style="background-image: url('images/linet.jpeg');">
+                    <div class="overlay">
+                        <h3>Linet</h3>
+                        <p>UI/UX Lead & Branding</p>
+                        <a href="https://www.linkedin.com/in/linet-waithira-9172aa2a0" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Can sketch entire interfaces with a marker ✍️</p>
                     </div>
-                    <h3>Join Our Pilot Program</h3>
-                    <p>Get early access to IntegriSense with comprehensive training and support. Limited spots available for qualified professionals.</p>
-                    <ul class="cta-benefits">
-                        <li>• Free 3-month trial</li>
-                        <li>• Professional training included</li>
-                        <li>• Direct developer support</li>
-                        <li>• Influence product development</li>
-                    </ul>
                 </div>
-                
-                <div class="cta-option">
-                    <div class="cta-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
+
+                <div class="team-member" style="background-image: url('images/lee.jpg');">
+                    <div class="overlay">
+                        <h3>Lee</h3>
+                        <p>IoT & H/W Alchemist</p>
+                        <a href="https://www.linkedin.com/in/lee-kariuki-6272491b5/" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Built a robot that served tea 🍵</p>
                     </div>
-                    <h3>Book a Live Demo</h3>
-                    <p>See IntegriSense in action with a personalized demonstration. Our experts will show you real-time biometric analysis.</p>
-                    <ul class="cta-benefits">
-                        <li>• 45-minute live demonstration</li>
-                        <li>• Use case specific examples</li>
-                        <li>• Q&A with technical experts</li>
-                        <li>• Custom integration planning</li>
-                    </ul>
                 </div>
-                
-                <div class="cta-option">
-                    <div class="cta-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                        </svg>
+               
+                <div class="team-member" style="background-image: url('/images/felix.jpg');">
+                    <div class="overlay">
+                        <h3>Felix</h3>
+                        <p>IoT & Hardware Systems Engineer</p>
+                        <a href="https://www.linkedin.com/in/felix-wanyoike-216640244" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Built a robot that served tea 🍵</p>
                     </div>
-                    <h3>Get Involved as a Professional</h3>
-                    <p>Help shape the future of biometric technology. Share your expertise and needs to guide our development roadmap.</p>
-                    <ul class="cta-benefits">
-                        <li>• Advisory board opportunities</li>
-                        <li>• Beta testing programs</li>
-                        <li>• Research collaboration</li>
-                        <li>• Speaking opportunities</li>
-                    </ul>
                 </div>
-            </div>
-            
-            <div class="cta-form">
-                <h3>Request Early Access</h3>
-                <form id="accessForm">
-                    <div class="form-group">
-                        <label for="email">Professional Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="your.email@organization.com" required>
+
+                <div class="team-member" style="background-image: url('images/richard.jpg');">
+                    <div class="overlay">
+                        <h3>Richard</h3>
+                        <p>Research</p>
+                        <a href="https://ke.linkedin.com/in/richard-kabuga-4175bb342" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Reads 3 research papers daily 📚</p>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="profession">Professional Role</label>
-                        <select id="profession" name="profession" required>
-                            <option value="">Select your profession</option>
-                            <option value="therapist">Therapist / Counselor</option>
-                            <option value="security">Security Professional</option>
-                            <option value="hr">HR / Recruiter</option>
-                            <option value="legal">Legal / Court Psychology</option>
-                            <option value="education">Educator / Behavioral Specialist</option>
-                            <option value="researcher">Researcher / Academic</option>
-                            <option value="other">Other Professional</option>
-                        </select>
+                </div>
+
+                <div class="team-member" style="background-image: url('images/sam.jpeg');">
+                    <div class="overlay">
+                        <h3>Sam</h3>
+                        <p>IoT & Hardware Systems Engineer</p>
+                        <a href="www.linkedin.com/in/samuel-kuria-242b84303" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Built a robot that served tea 🍵</p>
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-large">
-                        Join Pilot Program
-                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                </form>
-                
-                <p class="form-disclaimer">
-                    By joining, you agree to our terms of service and privacy policy. Professional verification required.
-                </p>
+                </div>
+
+                <div class="team-member" style="background-image: url('images/shem.jpg');">
+                    <div class="overlay">
+                        <h3>Shem</h3>
+                        <p>IoT & Hardware Systems Engineer</p>
+                        <a href="https://www.linkedin.com/in/lee-kariuki-6272491b5/" target="_blank">LinkedIn</a>
+                        <p class="fun-fact">Fun Fact: Codes with music at 2AM 🎵</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -852,61 +622,8 @@
                     <ul class="footer-links">
                         <li><a href="#">Therapy & Counseling</a></li>
                         <li><a href="#">Security Screening</a></li>
-                        <li><a href="#">HR & Recruitment</a></li>
-                        <li><a href="#">Legal Psychology</a></li>
                         <li><a href="#">Educational Assessment</a></li>
                     </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Scientific Research</a></li>
-                        <li><a href="#">Training Materials</a></li>
-                        <li><a href="#">User Documentation</a></li>
-                        <li><a href="#">Case Studies</a></li>
-                        <li><a href="#">Support Center</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Stay Updated</h4>
-                    <p>Get the latest updates on IntegriSense technology and research.</p>
-                    
-                    <form class="newsletter-form" id="newsletterForm">
-                        <div class="newsletter-input">
-                            <input type="email" placeholder="Enter your email" required>
-                            <button type="submit">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                    <polyline points="22,6 12,13 2,6"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
-                    
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                            San Francisco, CA
-                        </div>
-                        <div class="contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                            </svg>
-                            +1 (555) 123-4567
-                        </div>
-                        <div class="contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
-                            </svg>
-                            hello@integrisense.com
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -926,7 +643,6 @@
                         <a href="#">Privacy Policy</a>
                         <a href="#">Terms of Service</a>
                         <a href="#">Ethics Guidelines</a>
-                        <a href="#">HIPAA Compliance</a>
                     </div>
                 </div>
                 
