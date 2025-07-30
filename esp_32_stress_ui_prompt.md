@@ -4,9 +4,9 @@
 
 Build a **Flask backend** that:
 
-- Receives real-time **biometric sensor data** from an ESP32 device.
-- Calculates the **acceleration magnitude** from 3D acceleration input.
-- Broadcasts sensor values and prediction results to a **React + TypeScript dashboard** in real time using **WebSockets**.
+* Receives real-time **biometric sensor data** from an ESP32 device.
+* Calculates the **acceleration magnitude** from 3D acceleration input.
+* Broadcasts sensor values and prediction results to a **React + TypeScript dashboard** in real time using **WebSockets**.
 
 > **Note:** The model is being developed by the Machine Learning team. Backend developers will be responsible for integrating the final model.
 
@@ -48,25 +48,27 @@ Only this value is used in the dashboard display and for ML prediction.
 
 1. **Receive Data** via:
 
-   - `POST /api/sensor-data`
+   * `POST /api/sensor-data`
 
 2. **Process Data**:
 
-   - Calculate `acceleration_magnitude`
-   - Format data for model input as:
+   * Calculate `acceleration_magnitude`
+   * Format data for model input as:
+
      ```python
      [bvp, hrv, temperature, eda, acceleration_magnitude]
      ```
 
 3. **Run Prediction Using ML Model** (once provided):
 
-   - Load model on Flask startup using `joblib`, `pickle`, or `tensorflow` depending on format
-   - Add prediction result to WebSocket payload
+   * Load model on Flask startup using `joblib`, `pickle`, or `tensorflow` depending on format
+   * Add prediction result to WebSocket payload
 
 4. **Emit via WebSocket**:
 
-   - Event: `stream`
-   - Payload example:
+   * Event: `stream`
+   * Payload example:
+
      ```json
      {
        "bvp": 0.85,
@@ -85,7 +87,7 @@ Only this value is used in the dashboard display and for ML prediction.
 ### ✅ Responsibilities
 
 1. **Connect to WebSocket**
-2. **Listen for **``** Event**
+2. **Listen for `stream` Event**
 3. **Display Data in UI**
 
 ---
@@ -121,3 +123,51 @@ ESP32 ──POST──▶ Flask
 | joblib / pickle (ML)   | WebSocket state hooks  |
 | supabase-py (optional) | supabase-js (optional) |
 
+---
+
+## 📁 Suggested Flask Project Structure
+
+```
+/flask-backend
+  ├─ app.py              # Flask server setup
+  ├─ model.pkl           # Pretrained ML model
+  ├─ socketio_server.py  # WebSocket logic
+  ├─ serial_listener.py  # (Optional) USB data ingestion
+  └─ requirements.txt
+```
+
+---
+
+## ⚖️ Using a Virtual Environment
+
+### ✅ Setup Instructions (Windows)
+
+```bat
+:: 1. Create a virtual environment
+python -m venv venv
+
+:: 2. Activate the virtual environment
+venv\Scripts\activate
+
+:: 3. Install required dependencies
+pip install -r requirements.txt
+
+:: 4. Run the Flask app
+python app.py
+```
+
+### 🔧 Optional: Automate with a Script
+
+Create a file called `run.bat` (for Windows):
+
+**Windows - `run.bat`**
+
+```bat
+@echo off
+call venv\Scripts\activate
+python app.py
+```
+
+Simply double-click `run.bat` or run it from the terminal to activate the environment and launch the Flask server.
+
+---
