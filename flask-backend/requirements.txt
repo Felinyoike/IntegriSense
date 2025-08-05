@@ -17,3 +17,6 @@ xgboost==1.7.6
 # Utilities
 requests==2.31.0
 python-dotenv==1.0.0
+
+# Serial Communication 
+pyserial==3.5
