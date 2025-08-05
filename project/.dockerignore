@@ -1,0 +1,64 @@
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Test and debug artifacts
+test/
+tests/
+debug/
+*.log
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Documentation
+/docs/
+*.md
+README*
+
+# Docker files
+Dockerfile*
+docker-compose*
+
+# Temporary files and folders
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Images (if not needed in build context)
+images/
+
+# Miscellaneous
+*.DS_Store
+Thumbs.db
+
+# TypeScript cache (if any)
+*.tsbuildinfo
+
+# PostCSS and Tailwind cache (if any)
+.postcssrc*
+.tailwindrc*
