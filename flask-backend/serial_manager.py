@@ -47,7 +47,7 @@ class SerialManager:
             if system == 'linux':
                 esp32_ports = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyACM0', '/dev/ttyACM1']
             elif system == 'windows':
-                esp32_ports = ['COM3', 'COM4', 'COM5', 'COM6']
+                esp32_ports = ['COM3', 'COM4', 'COM5', 'COM6','COM13']
             elif system == 'darwin':  # macOS
                 esp32_ports = ['/dev/cu.usbserial-0001', '/dev/cu.SLAB_USBtoUART']
         
