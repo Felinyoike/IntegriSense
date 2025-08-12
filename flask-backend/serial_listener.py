@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class StandaloneSerialListener:
     """Standalone serial listener that posts to Flask backend"""
     
-    def __init__(self, flask_url='http://localhost:8081'):
+    def __init__(self, flask_url='http://localhost:5000'):
         self.flask_url = flask_url
         self.serial_manager = SerialManager(
             data_callback=self.send_to_flask
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     
     # Initialize standalone serial listener
-    listener = StandaloneSerialListener(flask_url='http://localhost:8081')
+    listener = StandaloneSerialListener(flask_url='http://localhost:5000')
     
     try:
         listener.start()

@@ -39,7 +39,7 @@ export const RealTimeMetrics = () => {
   useEffect(() => {
   if (isMonitoring) {
     const newSocket = io('ws://localhost:5000', {
-      transports: ['websocket', 'polling'],
+      transports: ['websocket'],
       timeout: 20000,
       reconnection: true,
       reconnectionAttempts: 5,

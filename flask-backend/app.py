@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import math
-import joblib
+import numpy as np
 import os
 import logging
 import threading
@@ -32,27 +32,28 @@ socketio = SocketIO(
     ping_interval=25
 )
 
-# Global variables
-ml_model = None
-serial_manager = None
+
 
 def load_ml_model():
-    """Load the ML model if available"""
+    """Load the TensorFlow Keras model if available"""
     global ml_model
-    # Try current directory first
-    model_path = 'stress_detection_model.pkl'
-    # If not found, try parent directory
-    if not os.path.exists(model_path):
-        model_path = os.path.join('..', 'stress_detection_model.pkl')
-    
+    ml_model = None
     try:
+        try:
+            import tensorflow as tf  # Lazy import to avoid hard dependency at startup
+        except Exception as import_err:
+            logger.warning(f"TensorFlow not available: {import_err}. Running without ML model.")
+            return
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(current_dir, 'stress_model.h5')
         if os.path.exists(model_path):
-            ml_model = joblib.load(model_path)
-            logger.info("ML model loaded successfully")
+            ml_model = tf.keras.models.load_model(model_path)
+            logger.info("TensorFlow model loaded successfully")
         else:
-            logger.warning(f"ML model not found at {model_path}")
+            logger.warning(f"TensorFlow model not found at {model_path}")
     except Exception as e:
-        logger.error(f"Error loading ML model: {e}")
+        logger.error(f"Error loading TensorFlow model: {e}")
 
 def calculate_acceleration_magnitude(acceleration):
     """Calculate acceleration magnitude from x, y, z components"""
@@ -63,25 +64,65 @@ def calculate_acceleration_magnitude(acceleration):
     return magnitude
 
 def predict_stress_level(features):
-    """Predict stress level using the ML model (disabled for now)"""
+    """Predict stress level using the TensorFlow model"""
     global ml_model
     if ml_model is None:
         return "Model Not Available"
-    
     try:
         # Features should be in format: [bvp, temperature, acceleration_magnitude]
-        prediction = ml_model.predict([features])
-        # Convert prediction to readable format
-        # Assuming the model returns 0 for Calm, 1 for Stressed
-        if prediction[0] == 0:
-            return "Calm"
-        elif prediction[0] == 1:
-            return "Stressed"
-        else:
-            return f"Unknown ({prediction[0]})"
+        input_data = np.array([features], dtype=np.float32)
+        prediction = ml_model.predict(input_data, verbose=0)
+        # Assume a single sigmoid output at index [0][0]
+        score = float(prediction[0][0]) if hasattr(prediction, '__getitem__') else float(prediction)
+        return "Stressed" if score > 0.5 else "Calm"
     except Exception as e:
         logger.error(f"Error making prediction: {e}")
         return "Prediction Error"
+
+    return '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <h1>Socket.IO Test</h1>
+    <div id="status">Connecting...</div>
+    <div id="data-count">Data packets: 0</div>
+    <div id="latest">Latest data will appear here</div>
+    <script>
+        const socket = io('http://localhost:5000', {  // Note: changed to port 5000
+            transports: ['polling']
+        });
+        
+        let count = 0;
+        
+        socket.on('connect', () => {
+            document.getElementById('status').innerHTML = '✅ Connected! ID: ' + socket.id;
+            document.getElementById('status').style.color = 'green';
+            console.log('Connected to Socket.IO!');
+        });
+        
+        socket.on('connect_error', (error) => {
+            document.getElementById('status').innerHTML = '❌ Error: ' + error;
+            document.getElementById('status').style.color = 'red';
+            console.error('Connection error:', error);
+        });
+        
+        socket.on('stream', (data) => {
+            count++;
+            document.getElementById('data-count').innerHTML = 'Data packets: ' + count;
+            document.getElementById('latest').innerHTML = 
+                'BVP: ' + data.bvp + 
+                ', Temp: ' + data.temperature + 
+                ', Accel: ' + data.acceleration_magnitude;
+            console.log('ESP32 Data:', data);
+        });
+    </script>
+</body>
+</html>
+    '''   
 
 def process_and_broadcast_data(data, source='http'):
     """Process sensor data and broadcast via SocketIO"""
@@ -120,11 +161,20 @@ def process_and_broadcast_data(data, source='http'):
         else:
             acceleration_magnitude = parsed_data.get('acceleration_magnitude', 0)
         
-        # Prepare payload for WebSocket emission (removed EDA and HRV)
+        # Prepare features for prediction and compute prediction
+        features = [
+            float(parsed_data.get('bvp', 0)),
+            float(parsed_data.get('temperature', 0)),
+            float(acceleration_magnitude)
+        ]
+        prediction_label = predict_stress_level(features)
+        
+        # Prepare payload for WebSocket emission
         payload = {
             'bvp': parsed_data.get('bvp', 0),
             'temperature': parsed_data.get('temperature', 0),
             'acceleration_magnitude': round(acceleration_magnitude, 4),
+            'prediction': prediction_label,
             'timestamp': datetime.now().isoformat(),
             'source': source  # Track data source (http/serial)
         }
@@ -162,7 +212,7 @@ def receive_sensor_data():
         if not data:
             return jsonify({'error': 'No data received'}), 400
         
-        # Validate required fields (removed EDA and HRV)
+        # Validate required fields
         required_fields = ['bvp', 'temperature']
         for field in required_fields:
             if field not in data:
@@ -320,7 +370,7 @@ def setup_serial_manager():
         logger.error(f"Failed to setup serial manager: {e}")
 
 if __name__ == '__main__':
-    # Load ML model on startup (but don't use it for predictions yet)
+    # Load ML model on startup
     load_ml_model()
     
     # Setup serial manager

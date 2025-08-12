@@ -1,12 +1,12 @@
 # Flask Backend for ESP32 Biometric Data Ingestion
 
-This Flask backend receives real-time biometric sensor data from ESP32 devices, processes it, and broadcasts the results to connected React dashboards via WebSockets.
+This Flask backend receives real-time biometric sensor data from ESP32 devices, processes it, predicts stress level using a TensorFlow `.h5` model, and broadcasts the results to connected React dashboards via WebSockets.
 
 ## Features
 
 - **Real-time data ingestion** from ESP32 via POST API
 - **Acceleration magnitude calculation** from 3D acceleration components
-- **ML model integration** for stress level prediction
+- **TensorFlow model integration** for stress level prediction
 - **WebSocket broadcasting** to React dashboard
 - **Optional USB serial listener** for direct ESP32 connection
 - **Health check endpoint** for monitoring
@@ -36,7 +36,7 @@ pip install -r requirements.txt
 ```
 
 3. Ensure the ML model is available:
-   - Place `stress_detection_model.pkl` in the parent directory
+   - Place `stress_model.h5` inside the `flask-backend` directory
    - The backend will automatically load it on startup
 
 ## Usage
@@ -58,9 +58,7 @@ Receive sensor data from ESP32
 ```json
 {
   "bvp": 0.85,
-  "hrv": 45.2,
   "temperature": 36.5,
-  "eda": 0.012,
   "acceleration": {
     "x": 0.02,
     "y": -0.01,
@@ -76,9 +74,7 @@ Receive sensor data from ESP32
   "message": "Data processed and broadcasted",
   "data": {
     "bvp": 0.85,
-    "hrv": 45.2,
     "temperature": 36.5,
-    "eda": 0.012,
     "acceleration_magnitude": 0.9803,
     "prediction": "Calm",
     "timestamp": "2024-01-01T12:00:00"
@@ -129,15 +125,15 @@ USB Serial (optional) → serial_listener.py → Flask Backend
 
 ## ML Model Integration
 
-The backend automatically loads `stress_detection_model.pkl` from the parent directory. The model should accept features in this format:
+The backend automatically loads `stress_model.h5` from the `flask-backend` directory. The model expects features in this format:
 
 ```python
-[bvp, hrv, temperature, eda, acceleration_magnitude]
+[bvp, temperature, acceleration_magnitude]
 ```
 
-And return predictions where:
-- `0` = Calm
-- `1` = Stressed
+The model should output a single probability (sigmoid) where:
+- `> 0.5` → `Stressed`
+- `<= 0.5` → `Calm`
 
 ## Configuration
 
@@ -156,9 +152,7 @@ curl -X POST http://localhost:5000/api/sensor-data \
   -H "Content-Type: application/json" \
   -d '{
     "bvp": 0.85,
-    "hrv": 45.2,
     "temperature": 36.5,
-    "eda": 0.012,
     "acceleration": {"x": 0.02, "y": -0.01, "z": 0.98}
   }'
 ```
@@ -168,6 +162,5 @@ curl -X POST http://localhost:5000/api/sensor-data \
 - Flask: Web framework
 - Flask-SocketIO: WebSocket support
 - Flask-CORS: Cross-origin resource sharing
-- joblib: ML model loading
-- scikit-learn: ML model support
+- TensorFlow: ML model loading and inference
 - eventlet: Async server support
