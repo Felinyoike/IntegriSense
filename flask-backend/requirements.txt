@@ -9,9 +9,9 @@ python-engineio==4.7.1
 eventlet==0.33.3
 
 # Machine Learning (Optional - install separately if available)
-# tensorflow==2.13.0
-# tensorflow-cpu==2.13.0
-numpy>=1.24,<2
+# TensorFlow for loading/saving the .h5 model and optional retraining
+tensorflow==2.19.0
+numpy>=1.26,<3
 
 # Serial Communication
 pyserial==3.5
@@ -19,3 +19,6 @@ pyserial==3.5
 # Utilities
 requests==2.31.0
 python-dotenv==1.0.0
+
+# Scheduling (for optional background retraining loop)
+APScheduler==3.10.4

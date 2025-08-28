@@ -3,7 +3,7 @@ import json
 import time
 
 # Test the Flask backend API endpoints
-BASE_URL = "http://localhost:8080"
+BASE_URL = "http://localhost:5000"
 
 def test_health_endpoint():
     """Test the health check endpoint"""
@@ -24,9 +24,7 @@ def test_sensor_data_endpoint():
     # Sample ESP32 sensor data
     sample_data = {
         "bvp": 0.85,
-        "hrv": 45.2,
         "temperature": 36.5,
-        "eda": 0.012,
         "acceleration": {
             "x": 0.02,
             "y": -0.01,
@@ -54,23 +52,17 @@ def test_multiple_sensor_readings():
     test_readings = [
         {
             "bvp": 0.82,
-            "hrv": 44.8,
             "temperature": 36.3,
-            "eda": 0.015,
             "acceleration": {"x": 0.01, "y": -0.02, "z": 0.99}
         },
         {
             "bvp": 0.88,
-            "hrv": 46.1,
             "temperature": 36.7,
-            "eda": 0.018,
             "acceleration": {"x": 0.03, "y": 0.01, "z": 0.97}
         },
         {
             "bvp": 0.79,
-            "hrv": 43.5,
             "temperature": 36.2,
-            "eda": 0.022,
             "acceleration": {"x": -0.01, "y": 0.02, "z": 0.98}
         }
     ]

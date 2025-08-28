@@ -3,20 +3,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Activity, Heart, Thermometer, Zap, Play, Pause, RotateCcw, Wifi, WifiOff } from "lucide-react";
+import { Activity, Heart, Thermometer, Zap, Play, Pause, RotateCcw, Wifi, WifiOff, Gauge, Droplet } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 
 interface RealTimeData {
   timestamp: string;
   bvp: number;
   temperature: number;
+  eda: number;
   acceleration_magnitude: number;
+  prediction?: string;
 }
 
 interface SensorData {
   bvp: number;
   temperature: number;
+  eda: number;
   acceleration_magnitude: number;
+  prediction?: string;
   timestamp: string;
   source: string; // 'serial' or 'http'
 }
@@ -27,7 +31,9 @@ export const RealTimeMetrics = () => {
   const [currentMetrics, setCurrentMetrics] = useState({
     bvp: 0,
     temperature: 0,
-    acceleration_magnitude: 0
+    eda: 0,
+    acceleration_magnitude: 0,
+    prediction: 'No prediction'
   });
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -38,8 +44,8 @@ export const RealTimeMetrics = () => {
   // WebSocket connection effect
   useEffect(() => {
   if (isMonitoring) {
-    const newSocket = io('ws://localhost:5000', {
-      transports: ['websocket'],
+    const newSocket = io('http://localhost:5000', {
+      transports: ['websocket','polling'],
       timeout: 20000,
       reconnection: true,
       reconnectionAttempts: 5,
@@ -47,7 +53,10 @@ export const RealTimeMetrics = () => {
       autoConnect: true
     });
 
-      
+      newSocket.on("connect", () => {
+        console.log("Connected to Flask backend");
+        setIsConnected(true);
+      });
       newSocket.on("disconnect", () => {
         console.log("Disconnected from Flask backend");
         setIsConnected(false);
@@ -66,7 +75,9 @@ export const RealTimeMetrics = () => {
         setCurrentMetrics({
           bvp: sensorData.bvp || 0,
           temperature: sensorData.temperature || 0,
-          acceleration_magnitude: sensorData.acceleration_magnitude || 0
+          eda: sensorData.eda || 0,
+          acceleration_magnitude: sensorData.acceleration_magnitude || 0,
+          prediction: sensorData.prediction || 'No prediction'
         });
         
         // Update last updated timestamp and data count
@@ -75,10 +86,11 @@ export const RealTimeMetrics = () => {
         
         // Add to chart data
         const newDataPoint: RealTimeData = {
-          timestamp: new Date().toLocaleTimeString(),
           bvp: sensorData.bvp || 0,
           temperature: sensorData.temperature || 0,
-          acceleration_magnitude: sensorData.acceleration_magnitude || 0
+          eda: sensorData.eda || 0,
+          acceleration_magnitude: sensorData.acceleration_magnitude || 0,
+          timestamp: new Date().toLocaleTimeString()
         };
         
         setData(prev => {
@@ -124,7 +136,9 @@ export const RealTimeMetrics = () => {
     setCurrentMetrics({
       bvp: 0,
       temperature: 0,
-      acceleration_magnitude: 0
+      eda: 0,
+      acceleration_magnitude: 0,
+      prediction: 'No prediction'
     });
   };
 
@@ -138,10 +152,20 @@ export const RealTimeMetrics = () => {
   const connectionStatus = getConnectionStatus();
   const StatusIcon = connectionStatus.icon;
 
+  // Map connection status to Tailwind-safe theme classes (avoid dynamic class names)
+  const statusClassMap: Record<string, { border: string; icon: string }> = {
+    success: { border: 'border-success/20', icon: 'text-success' },
+    warning: { border: 'border-warning/20', icon: 'text-warning' },
+    destructive: { border: 'border-destructive/20', icon: 'text-destructive' },
+    secondary: { border: 'border-muted/20', icon: 'text-muted-foreground' },
+  };
+
+  const statusClasses = statusClassMap[connectionStatus.color] || statusClassMap.secondary;
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-primary/20">
+      <Card className="border-primary/20 shadow-card">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -186,11 +210,11 @@ export const RealTimeMetrics = () => {
       </Card>
 
       {/* Connection Status */}
-      <Card className={`border-${connectionStatus.color}/20`}>
+      <Card className={`${statusClasses.border} shadow-card`}>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <StatusIcon className={`h-5 w-5 text-${connectionStatus.color} ${esp32Connected ? 'animate-pulse' : ''}`} />
+              <StatusIcon className={`h-5 w-5 ${statusClasses.icon} ${esp32Connected ? 'animate-pulse' : ''}`} />
               <div>
                 <Badge variant={connectionStatus.color === "success" ? "default" : "secondary"}>
                   {connectionStatus.label}
@@ -210,43 +234,55 @@ export const RealTimeMetrics = () => {
       </Card>
 
       {/* Current Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-primary/20">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <Card className="border-muted/20 shadow-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">BVP</CardTitle>
-            <Heart className="h-4 w-4 text-primary" />
+            <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">
-              {currentMetrics.bvp.toFixed(3)}
-            </div>
-            <p className="text-xs text-muted-foreground">Blood Volume Pulse</p>
+            <div className="text-2xl font-bold">{currentMetrics.bvp.toFixed(2)}</div>
+            <p className="text-xs text-muted-foreground">Beats per minute</p>
           </CardContent>
         </Card>
-
-        <Card className="border-accent/20">
+        <Card className="border-muted/20 shadow-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Temperature</CardTitle>
-            <Thermometer className="h-4 w-4 text-accent" />
+            <Thermometer className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-accent">
-              {currentMetrics.temperature.toFixed(1)}°C
-            </div>
+            <div className="text-2xl font-bold">{currentMetrics.temperature.toFixed(1)}°C</div>
             <p className="text-xs text-muted-foreground">Body temperature</p>
           </CardContent>
         </Card>
-
-        <Card className="border-info/20">
+        <Card className="border-muted/20 shadow-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Acceleration</CardTitle>
-            <Zap className="h-4 w-4 text-info" />
+            <CardTitle className="text-sm font-medium">EDA</CardTitle>
+            <Droplet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-info">
-              {currentMetrics.acceleration_magnitude.toFixed(4)}
-            </div>
-            <p className="text-xs text-muted-foreground">Magnitude (g)</p>
+            <div className="text-2xl font-bold">{currentMetrics.eda.toFixed(2)} μS</div>
+            <p className="text-xs text-muted-foreground">Electrodermal Activity</p>
+          </CardContent>
+        </Card>
+        <Card className="border-muted/20 shadow-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Acceleration</CardTitle>
+            <Gauge className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{currentMetrics.acceleration_magnitude.toFixed(2)} g</div>
+            <p className="text-xs text-muted-foreground">Movement magnitude</p>
+          </CardContent>
+        </Card>
+        <Card className="border-primary/20 shadow-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Stress Level</CardTitle>
+            <Activity className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{currentMetrics.prediction}</div>
+            <p className="text-xs text-muted-foreground">AI Prediction</p>
           </CardContent>
         </Card>
       </div>
@@ -339,6 +375,49 @@ export const RealTimeMetrics = () => {
         <Card className="border-info/20 shadow-card">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
+              <Droplet className="h-5 w-5 text-info" />
+              <span>EDA Trend</span>
+            </CardTitle>
+            <CardDescription>Real-time electrodermal activity (EDA)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis 
+                    dataKey="timestamp" 
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={12}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '6px'
+                    }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="eda" 
+                    stroke="#00b894" 
+                    strokeWidth={2}
+                    dot={false}
+                    connectNulls={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-info/20 shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
               <Zap className="h-5 w-5 text-info" />
               <span>Acceleration Trend</span>
             </CardTitle>
@@ -402,6 +481,12 @@ export const RealTimeMetrics = () => {
                 <div className="font-medium text-muted-foreground">Avg Temp</div>
                 <div className="text-lg font-bold">
                   {data.length > 0 ? (data.reduce((sum, d) => sum + d.temperature, 0) / data.length).toFixed(1) : '0.0'}°C
+                </div>
+              </div>
+              <div>
+                <div className="font-medium text-muted-foreground">Avg EDA</div>
+                <div className="text-lg font-bold">
+                  {data.length > 0 ? (data.reduce((sum, d) => sum + d.eda, 0) / data.length).toFixed(3) : '0.000'}
                 </div>
               </div>
             </div>
